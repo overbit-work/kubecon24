@@ -35,3 +35,11 @@ model Attendee {
   surnam    String?
   updatedAt DateTime  @updatedAt
 }
+
+model Promotion {
+  coide      String?
+  createdAt  DateTime  @default(now())
+  expiryDate DateTime?
+  id         String    @id @default(cuid())
+  updatedAt  DateTime  @updatedAt
+}

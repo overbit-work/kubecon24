@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { UserModule } from "./user/user.module";
 import { BookingModule } from "./booking/booking.module";
 import { AttendeeModule } from "./attendee/attendee.module";
+import { PromotionModule } from "./promotion/promotion.module";
 import { HealthModule } from "./health/health.module";
 import { PrismaModule } from "./prisma/prisma.module";
 import { SecretsManagerModule } from "./providers/secrets/secretsManager.module";
@@ -22,6 +23,7 @@ import { AuthModule } from "./auth/auth.module";
     UserModule,
     BookingModule,
     AttendeeModule,
+    PromotionModule,
     HealthModule,
     PrismaModule,
     SecretsManagerModule,
