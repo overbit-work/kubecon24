@@ -1,0 +1,28 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Shipment {
+  courier           Courier? @relation(fields: [courierId], references: [id])
+  courierId         String?
+  createdAt         DateTime @default(now())
+  deliveryAddressId String?
+  id                String   @id @default(cuid())
+  orderItem         Json
+  updatedAt         DateTime @updatedAt
+}
+
+model Courier {
+  billingAddress String?
+  country        String?
+  createdAt      DateTime   @default(now())
+  id             String     @id @default(cuid())
+  name           String?
+  shipments      Shipment[]
+  updatedAt      DateTime   @updatedAt
+}
