@@ -20,6 +20,8 @@ import { CourierFindUniqueArgs } from "./CourierFindUniqueArgs";
 import { CreateCourierArgs } from "./CreateCourierArgs";
 import { UpdateCourierArgs } from "./UpdateCourierArgs";
 import { DeleteCourierArgs } from "./DeleteCourierArgs";
+import { CourierAssignedDriverFindManyArgs } from "../../courierAssignedDriver/base/CourierAssignedDriverFindManyArgs";
+import { CourierAssignedDriver } from "../../courierAssignedDriver/base/CourierAssignedDriver";
 import { ShipmentFindManyArgs } from "../../shipment/base/ShipmentFindManyArgs";
 import { Shipment } from "../../shipment/base/Shipment";
 import { CourierService } from "../courier.service";
@@ -97,6 +99,25 @@ export class CourierResolverBase {
       }
       throw error;
     }
+  }
+
+  @graphql.ResolveField(() => [CourierAssignedDriver], {
+    name: "courierAssignedDrivers",
+  })
+  async findCourierAssignedDrivers(
+    @graphql.Parent() parent: Courier,
+    @graphql.Args() args: CourierAssignedDriverFindManyArgs
+  ): Promise<CourierAssignedDriver[]> {
+    const results = await this.service.findCourierAssignedDrivers(
+      parent.id,
+      args
+    );
+
+    if (!results) {
+      return [];
+    }
+
+    return results;
   }
 
   @graphql.ResolveField(() => [Shipment], { name: "shipments" })

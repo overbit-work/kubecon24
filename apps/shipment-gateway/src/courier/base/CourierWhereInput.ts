@@ -14,6 +14,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { StringNullableFilter } from "../../util/StringNullableFilter";
 import { Type } from "class-transformer";
 import { IsOptional, ValidateNested } from "class-validator";
+import { CourierAssignedDriverListRelationFilter } from "../../courierAssignedDriver/base/CourierAssignedDriverListRelationFilter";
 import { DateTimeFilter } from "../../util/DateTimeFilter";
 import { StringFilter } from "../../util/StringFilter";
 import { ShipmentListRelationFilter } from "../../shipment/base/ShipmentListRelationFilter";
@@ -41,6 +42,18 @@ class CourierWhereInput {
     nullable: true,
   })
   country?: StringNullableFilter;
+
+  @ApiProperty({
+    required: false,
+    type: () => CourierAssignedDriverListRelationFilter,
+  })
+  @ValidateNested()
+  @Type(() => CourierAssignedDriverListRelationFilter)
+  @IsOptional()
+  @Field(() => CourierAssignedDriverListRelationFilter, {
+    nullable: true,
+  })
+  courierAssignedDrivers?: CourierAssignedDriverListRelationFilter;
 
   @ApiProperty({
     required: false,

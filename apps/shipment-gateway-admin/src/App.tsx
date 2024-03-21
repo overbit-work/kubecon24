@@ -13,6 +13,10 @@ import { CourierList } from "./courier/CourierList";
 import { CourierCreate } from "./courier/CourierCreate";
 import { CourierEdit } from "./courier/CourierEdit";
 import { CourierShow } from "./courier/CourierShow";
+import { CourierAssignedDriverList } from "./courierAssignedDriver/CourierAssignedDriverList";
+import { CourierAssignedDriverCreate } from "./courierAssignedDriver/CourierAssignedDriverCreate";
+import { CourierAssignedDriverEdit } from "./courierAssignedDriver/CourierAssignedDriverEdit";
+import { CourierAssignedDriverShow } from "./courierAssignedDriver/CourierAssignedDriverShow";
 import { jwtAuthProvider } from "./auth-provider/ra-auth-jwt";
 
 const App = (): React.ReactElement => {
@@ -52,6 +56,13 @@ const App = (): React.ReactElement => {
           edit={CourierEdit}
           create={CourierCreate}
           show={CourierShow}
+        />
+        <Resource
+          name="CourierAssignedDriver"
+          list={CourierAssignedDriverList}
+          edit={CourierAssignedDriverEdit}
+          create={CourierAssignedDriverCreate}
+          show={CourierAssignedDriverShow}
         />
       </Admin>
     </div>

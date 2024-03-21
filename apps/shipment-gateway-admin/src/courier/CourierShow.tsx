@@ -24,6 +24,26 @@ export const CourierShow = (props: ShowProps): React.ReactElement => {
         <TextField label="Name" source="name" />
         <DateField source="updatedAt" label="Updated At" />
         <ReferenceManyField
+          reference="CourierAssignedDriver"
+          target="courierId"
+          label="CourierAssignedDrivers"
+        >
+          <Datagrid rowClick="show">
+            <ReferenceField
+              label="Courier"
+              source="courier.id"
+              reference="Courier"
+            >
+              <TextField source={COURIER_TITLE_FIELD} />
+            </ReferenceField>
+            <DateField source="createdAt" label="Created At" />
+            <TextField label="ID" source="id" />
+            <TextField label="Location" source="location" />
+            <TextField label="Name" source="name" />
+            <DateField source="updatedAt" label="Updated At" />
+          </Datagrid>
+        </ReferenceManyField>
+        <ReferenceManyField
           reference="Shipment"
           target="courierId"
           label="Shipments"

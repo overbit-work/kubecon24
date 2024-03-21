@@ -14,6 +14,7 @@ import { PrismaService } from "../../prisma/prisma.service";
 import {
   Prisma,
   Courier, // @ts-ignore
+  CourierAssignedDriver, // @ts-ignore
   Shipment,
 } from "@prisma/client";
 
@@ -50,6 +51,17 @@ export class CourierServiceBase {
     args: Prisma.SelectSubset<T, Prisma.CourierDeleteArgs>
   ): Promise<Courier> {
     return this.prisma.courier.delete(args);
+  }
+
+  async findCourierAssignedDrivers(
+    parentId: string,
+    args: Prisma.CourierAssignedDriverFindManyArgs
+  ): Promise<CourierAssignedDriver[]> {
+    return this.prisma.courier
+      .findUniqueOrThrow({
+        where: { id: parentId },
+      })
+      .courierAssignedDrivers(args);
   }
 
   async findShipments(

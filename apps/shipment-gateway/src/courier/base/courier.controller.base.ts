@@ -22,6 +22,9 @@ import { Courier } from "./Courier";
 import { CourierFindManyArgs } from "./CourierFindManyArgs";
 import { CourierWhereUniqueInput } from "./CourierWhereUniqueInput";
 import { CourierUpdateInput } from "./CourierUpdateInput";
+import { CourierAssignedDriverFindManyArgs } from "../../courierAssignedDriver/base/CourierAssignedDriverFindManyArgs";
+import { CourierAssignedDriver } from "../../courierAssignedDriver/base/CourierAssignedDriver";
+import { CourierAssignedDriverWhereUniqueInput } from "../../courierAssignedDriver/base/CourierAssignedDriverWhereUniqueInput";
 import { ShipmentFindManyArgs } from "../../shipment/base/ShipmentFindManyArgs";
 import { Shipment } from "../../shipment/base/Shipment";
 import { ShipmentWhereUniqueInput } from "../../shipment/base/ShipmentWhereUniqueInput";
@@ -145,6 +148,91 @@ export class CourierControllerBase {
       }
       throw error;
     }
+  }
+
+  @common.Get("/:id/courierAssignedDrivers")
+  @ApiNestedQuery(CourierAssignedDriverFindManyArgs)
+  async findCourierAssignedDrivers(
+    @common.Req() request: Request,
+    @common.Param() params: CourierWhereUniqueInput
+  ): Promise<CourierAssignedDriver[]> {
+    const query = plainToClass(
+      CourierAssignedDriverFindManyArgs,
+      request.query
+    );
+    const results = await this.service.findCourierAssignedDrivers(params.id, {
+      ...query,
+      select: {
+        courier: {
+          select: {
+            id: true,
+          },
+        },
+
+        createdAt: true,
+        id: true,
+        location: true,
+        name: true,
+        updatedAt: true,
+      },
+    });
+    if (results === null) {
+      throw new errors.NotFoundException(
+        `No resource was found for ${JSON.stringify(params)}`
+      );
+    }
+    return results;
+  }
+
+  @common.Post("/:id/courierAssignedDrivers")
+  async connectCourierAssignedDrivers(
+    @common.Param() params: CourierWhereUniqueInput,
+    @common.Body() body: CourierAssignedDriverWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      courierAssignedDrivers: {
+        connect: body,
+      },
+    };
+    await this.service.updateCourier({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.Patch("/:id/courierAssignedDrivers")
+  async updateCourierAssignedDrivers(
+    @common.Param() params: CourierWhereUniqueInput,
+    @common.Body() body: CourierAssignedDriverWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      courierAssignedDrivers: {
+        set: body,
+      },
+    };
+    await this.service.updateCourier({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.Delete("/:id/courierAssignedDrivers")
+  async disconnectCourierAssignedDrivers(
+    @common.Param() params: CourierWhereUniqueInput,
+    @common.Body() body: CourierAssignedDriverWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      courierAssignedDrivers: {
+        disconnect: body,
+      },
+    };
+    await this.service.updateCourier({
+      where: params,
+      data,
+      select: { id: true },
+    });
   }
 
   @common.Get("/:id/shipments")
