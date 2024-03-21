@@ -12,8 +12,9 @@ https://docs.amplication.com/how-to/custom-code
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsString, IsOptional, ValidateNested } from "class-validator";
-import { ShipmentCreateNestedManyWithoutCouriersInput } from "./ShipmentCreateNestedManyWithoutCouriersInput";
+import { CourierAssignedDriverCreateNestedManyWithoutCouriersInput } from "./CourierAssignedDriverCreateNestedManyWithoutCouriersInput";
 import { Type } from "class-transformer";
+import { ShipmentCreateNestedManyWithoutCouriersInput } from "./ShipmentCreateNestedManyWithoutCouriersInput";
 
 @InputType()
 class CourierCreateInput {
@@ -38,6 +39,18 @@ class CourierCreateInput {
     nullable: true,
   })
   country?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: () => CourierAssignedDriverCreateNestedManyWithoutCouriersInput,
+  })
+  @ValidateNested()
+  @Type(() => CourierAssignedDriverCreateNestedManyWithoutCouriersInput)
+  @IsOptional()
+  @Field(() => CourierAssignedDriverCreateNestedManyWithoutCouriersInput, {
+    nullable: true,
+  })
+  courierAssignedDrivers?: CourierAssignedDriverCreateNestedManyWithoutCouriersInput;
 
   @ApiProperty({
     required: false,

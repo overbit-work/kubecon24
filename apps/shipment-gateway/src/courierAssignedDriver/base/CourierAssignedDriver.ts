@@ -11,43 +11,20 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { ObjectType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsOptional, ValidateNested, IsDate } from "class-validator";
-import { CourierAssignedDriver } from "../../courierAssignedDriver/base/CourierAssignedDriver";
+import { Courier } from "../../courier/base/Courier";
+import { ValidateNested, IsOptional, IsDate, IsString } from "class-validator";
 import { Type } from "class-transformer";
-import { Shipment } from "../../shipment/base/Shipment";
 
 @ObjectType()
-class Courier {
+class CourierAssignedDriver {
   @ApiProperty({
     required: false,
-    type: String,
-  })
-  @IsString()
-  @IsOptional()
-  @Field(() => String, {
-    nullable: true,
-  })
-  billingAddress!: string | null;
-
-  @ApiProperty({
-    required: false,
-    type: String,
-  })
-  @IsString()
-  @IsOptional()
-  @Field(() => String, {
-    nullable: true,
-  })
-  country!: string | null;
-
-  @ApiProperty({
-    required: false,
-    type: () => [CourierAssignedDriver],
+    type: () => Courier,
   })
   @ValidateNested()
-  @Type(() => CourierAssignedDriver)
+  @Type(() => Courier)
   @IsOptional()
-  courierAssignedDrivers?: Array<CourierAssignedDriver>;
+  courier?: Courier | null;
 
   @ApiProperty({
     required: true,
@@ -74,16 +51,18 @@ class Courier {
   @Field(() => String, {
     nullable: true,
   })
-  name!: string | null;
+  location!: string | null;
 
   @ApiProperty({
     required: false,
-    type: () => [Shipment],
+    type: String,
   })
-  @ValidateNested()
-  @Type(() => Shipment)
+  @IsString()
   @IsOptional()
-  shipments?: Array<Shipment>;
+  @Field(() => String, {
+    nullable: true,
+  })
+  name!: string | null;
 
   @ApiProperty({
     required: true,
@@ -94,4 +73,4 @@ class Courier {
   updatedAt!: Date;
 }
 
-export { Courier as Courier };
+export { CourierAssignedDriver as CourierAssignedDriver };
