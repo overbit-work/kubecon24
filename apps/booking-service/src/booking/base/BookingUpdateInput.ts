@@ -14,6 +14,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { AttendeeWhereUniqueInput } from "../../attendee/base/AttendeeWhereUniqueInput";
 import { ValidateNested, IsOptional } from "class-validator";
 import { Type } from "class-transformer";
+import { PromotionWhereUniqueInput } from "../../promotion/base/PromotionWhereUniqueInput";
 
 @InputType()
 class BookingUpdateInput {
@@ -28,6 +29,18 @@ class BookingUpdateInput {
     nullable: true,
   })
   attendee?: AttendeeWhereUniqueInput | null;
+
+  @ApiProperty({
+    required: false,
+    type: () => PromotionWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => PromotionWhereUniqueInput)
+  @IsOptional()
+  @Field(() => PromotionWhereUniqueInput, {
+    nullable: true,
+  })
+  promotions?: PromotionWhereUniqueInput | null;
 }
 
 export { BookingUpdateInput as BookingUpdateInput };

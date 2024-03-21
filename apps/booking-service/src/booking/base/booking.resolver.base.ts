@@ -27,6 +27,7 @@ import { CreateBookingArgs } from "./CreateBookingArgs";
 import { UpdateBookingArgs } from "./UpdateBookingArgs";
 import { DeleteBookingArgs } from "./DeleteBookingArgs";
 import { Attendee } from "../../attendee/base/Attendee";
+import { Promotion } from "../../promotion/base/Promotion";
 import { BookingService } from "../booking.service";
 @common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
 @graphql.Resolver(() => Booking)
@@ -101,6 +102,12 @@ export class BookingResolverBase {
               connect: args.data.attendee,
             }
           : undefined,
+
+        promotions: args.data.promotions
+          ? {
+              connect: args.data.promotions,
+            }
+          : undefined,
       },
     });
   }
@@ -124,6 +131,12 @@ export class BookingResolverBase {
           attendee: args.data.attendee
             ? {
                 connect: args.data.attendee,
+              }
+            : undefined,
+
+          promotions: args.data.promotions
+            ? {
+                connect: args.data.promotions,
               }
             : undefined,
         },
@@ -173,6 +186,27 @@ export class BookingResolverBase {
     @graphql.Parent() parent: Booking
   ): Promise<Attendee | null> {
     const result = await this.service.getAttendee(parent.id);
+
+    if (!result) {
+      return null;
+    }
+    return result;
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @graphql.ResolveField(() => Promotion, {
+    nullable: true,
+    name: "promotions",
+  })
+  @nestAccessControl.UseRoles({
+    resource: "Promotion",
+    action: "read",
+    possession: "any",
+  })
+  async getPromotions(
+    @graphql.Parent() parent: Booking
+  ): Promise<Promotion | null> {
+    const result = await this.service.getPromotions(parent.id);
 
     if (!result) {
       return null;

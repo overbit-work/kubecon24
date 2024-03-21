@@ -14,7 +14,8 @@ import { PrismaService } from "../../prisma/prisma.service";
 import {
   Prisma,
   Booking, // @ts-ignore
-  Attendee,
+  Attendee, // @ts-ignore
+  Promotion,
 } from "@prisma/client";
 
 export class BookingServiceBase {
@@ -58,5 +59,13 @@ export class BookingServiceBase {
         where: { id: parentId },
       })
       .attendee();
+  }
+
+  async getPromotions(parentId: string): Promise<Promotion | null> {
+    return this.prisma.booking
+      .findUnique({
+        where: { id: parentId },
+      })
+      .promotions();
   }
 }

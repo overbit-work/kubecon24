@@ -10,7 +10,12 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "../../prisma/prisma.service";
-import { Prisma, Promotion } from "@prisma/client";
+
+import {
+  Prisma,
+  Promotion, // @ts-ignore
+  Booking,
+} from "@prisma/client";
 
 export class PromotionServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
@@ -45,5 +50,13 @@ export class PromotionServiceBase {
     args: Prisma.SelectSubset<T, Prisma.PromotionDeleteArgs>
   ): Promise<Promotion> {
     return this.prisma.promotion.delete(args);
+  }
+
+  async getBooking(parentId: string): Promise<Booking | null> {
+    return this.prisma.promotion
+      .findUnique({
+        where: { id: parentId },
+      })
+      .booking();
   }
 }

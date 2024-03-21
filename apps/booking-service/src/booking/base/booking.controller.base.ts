@@ -57,6 +57,12 @@ export class BookingControllerBase {
               connect: data.attendee,
             }
           : undefined,
+
+        promotions: data.promotions
+          ? {
+              connect: data.promotions,
+            }
+          : undefined,
       },
       select: {
         attendee: {
@@ -67,6 +73,13 @@ export class BookingControllerBase {
 
         createdAt: true,
         id: true,
+
+        promotions: {
+          select: {
+            id: true,
+          },
+        },
+
         updatedAt: true,
       },
     });
@@ -97,6 +110,13 @@ export class BookingControllerBase {
 
         createdAt: true,
         id: true,
+
+        promotions: {
+          select: {
+            id: true,
+          },
+        },
+
         updatedAt: true,
       },
     });
@@ -128,6 +148,13 @@ export class BookingControllerBase {
 
         createdAt: true,
         id: true,
+
+        promotions: {
+          select: {
+            id: true,
+          },
+        },
+
         updatedAt: true,
       },
     });
@@ -166,6 +193,12 @@ export class BookingControllerBase {
                 connect: data.attendee,
               }
             : undefined,
+
+          promotions: data.promotions
+            ? {
+                connect: data.promotions,
+              }
+            : undefined,
         },
         select: {
           attendee: {
@@ -176,6 +209,13 @@ export class BookingControllerBase {
 
           createdAt: true,
           id: true,
+
+          promotions: {
+            select: {
+              id: true,
+            },
+          },
+
           updatedAt: true,
         },
       });
@@ -215,6 +255,13 @@ export class BookingControllerBase {
 
           createdAt: true,
           id: true,
+
+          promotions: {
+            select: {
+              id: true,
+            },
+          },
+
           updatedAt: true,
         },
       });
