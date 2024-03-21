@@ -14,6 +14,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { Attendee } from "../../attendee/base/Attendee";
 import { ValidateNested, IsOptional, IsDate, IsString } from "class-validator";
 import { Type } from "class-transformer";
+import { Promotion } from "../../promotion/base/Promotion";
 
 @ObjectType()
 class Booking {
@@ -41,6 +42,15 @@ class Booking {
   @IsString()
   @Field(() => String)
   id!: string;
+
+  @ApiProperty({
+    required: false,
+    type: () => Promotion,
+  })
+  @ValidateNested()
+  @Type(() => Promotion)
+  @IsOptional()
+  promotions?: Promotion | null;
 
   @ApiProperty({
     required: true,

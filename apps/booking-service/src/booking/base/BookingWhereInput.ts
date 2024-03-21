@@ -15,6 +15,7 @@ import { AttendeeWhereUniqueInput } from "../../attendee/base/AttendeeWhereUniqu
 import { ValidateNested, IsOptional } from "class-validator";
 import { Type } from "class-transformer";
 import { StringFilter } from "../../util/StringFilter";
+import { PromotionWhereUniqueInput } from "../../promotion/base/PromotionWhereUniqueInput";
 
 @InputType()
 class BookingWhereInput {
@@ -40,6 +41,18 @@ class BookingWhereInput {
     nullable: true,
   })
   id?: StringFilter;
+
+  @ApiProperty({
+    required: false,
+    type: () => PromotionWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => PromotionWhereUniqueInput)
+  @IsOptional()
+  @Field(() => PromotionWhereUniqueInput, {
+    nullable: true,
+  })
+  promotions?: PromotionWhereUniqueInput;
 }
 
 export { BookingWhereInput as BookingWhereInput };

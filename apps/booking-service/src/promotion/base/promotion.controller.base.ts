@@ -49,8 +49,22 @@ export class PromotionControllerBase {
     @common.Body() data: PromotionCreateInput
   ): Promise<Promotion> {
     return await this.service.createPromotion({
-      data: data,
+      data: {
+        ...data,
+
+        booking: data.booking
+          ? {
+              connect: data.booking,
+            }
+          : undefined,
+      },
       select: {
+        booking: {
+          select: {
+            id: true,
+          },
+        },
+
         coide: true,
         createdAt: true,
         expiryDate: true,
@@ -77,6 +91,12 @@ export class PromotionControllerBase {
     return this.service.promotions({
       ...args,
       select: {
+        booking: {
+          select: {
+            id: true,
+          },
+        },
+
         coide: true,
         createdAt: true,
         expiryDate: true,
@@ -104,6 +124,12 @@ export class PromotionControllerBase {
     const result = await this.service.promotion({
       where: params,
       select: {
+        booking: {
+          select: {
+            id: true,
+          },
+        },
+
         coide: true,
         createdAt: true,
         expiryDate: true,
@@ -138,8 +164,22 @@ export class PromotionControllerBase {
     try {
       return await this.service.updatePromotion({
         where: params,
-        data: data,
+        data: {
+          ...data,
+
+          booking: data.booking
+            ? {
+                connect: data.booking,
+              }
+            : undefined,
+        },
         select: {
+          booking: {
+            select: {
+              id: true,
+            },
+          },
+
           coide: true,
           createdAt: true,
           expiryDate: true,
@@ -175,6 +215,12 @@ export class PromotionControllerBase {
       return await this.service.deletePromotion({
         where: params,
         select: {
+          booking: {
+            select: {
+              id: true,
+            },
+          },
+
           coide: true,
           createdAt: true,
           expiryDate: true,

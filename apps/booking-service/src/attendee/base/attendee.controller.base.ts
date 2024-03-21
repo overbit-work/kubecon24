@@ -219,6 +219,13 @@ export class AttendeeControllerBase {
 
         createdAt: true,
         id: true,
+
+        promotions: {
+          select: {
+            id: true,
+          },
+        },
+
         updatedAt: true,
       },
     });
