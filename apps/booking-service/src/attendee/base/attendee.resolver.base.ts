@@ -26,6 +26,8 @@ import { AttendeeFindUniqueArgs } from "./AttendeeFindUniqueArgs";
 import { CreateAttendeeArgs } from "./CreateAttendeeArgs";
 import { UpdateAttendeeArgs } from "./UpdateAttendeeArgs";
 import { DeleteAttendeeArgs } from "./DeleteAttendeeArgs";
+import { AddressFindManyArgs } from "../../address/base/AddressFindManyArgs";
+import { Address } from "../../address/base/Address";
 import { BookingFindManyArgs } from "../../booking/base/BookingFindManyArgs";
 import { Booking } from "../../booking/base/Booking";
 import { Company } from "../../company/base/Company";
@@ -159,6 +161,26 @@ export class AttendeeResolverBase {
       }
       throw error;
     }
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @graphql.ResolveField(() => [Address], { name: "addresses" })
+  @nestAccessControl.UseRoles({
+    resource: "Address",
+    action: "read",
+    possession: "any",
+  })
+  async findAddresses(
+    @graphql.Parent() parent: Attendee,
+    @graphql.Args() args: AddressFindManyArgs
+  ): Promise<Address[]> {
+    const results = await this.service.findAddresses(parent.id, args);
+
+    if (!results) {
+      return [];
+    }
+
+    return results;
   }
 
   @common.UseInterceptors(AclFilterResponseInterceptor)

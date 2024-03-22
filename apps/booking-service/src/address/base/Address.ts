@@ -11,11 +11,21 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { ObjectType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsOptional, IsDate } from "class-validator";
+import { Attendee } from "../../attendee/base/Attendee";
+import { ValidateNested, IsOptional, IsString, IsDate } from "class-validator";
 import { Type } from "class-transformer";
 
 @ObjectType()
 class Address {
+  @ApiProperty({
+    required: false,
+    type: () => Attendee,
+  })
+  @ValidateNested()
+  @Type(() => Attendee)
+  @IsOptional()
+  attendee?: Attendee | null;
+
   @ApiProperty({
     required: false,
     type: String,

@@ -26,6 +26,9 @@ import { Attendee } from "./Attendee";
 import { AttendeeFindManyArgs } from "./AttendeeFindManyArgs";
 import { AttendeeWhereUniqueInput } from "./AttendeeWhereUniqueInput";
 import { AttendeeUpdateInput } from "./AttendeeUpdateInput";
+import { AddressFindManyArgs } from "../../address/base/AddressFindManyArgs";
+import { Address } from "../../address/base/Address";
+import { AddressWhereUniqueInput } from "../../address/base/AddressWhereUniqueInput";
 import { BookingFindManyArgs } from "../../booking/base/BookingFindManyArgs";
 import { Booking } from "../../booking/base/Booking";
 import { BookingWhereUniqueInput } from "../../booking/base/BookingWhereUniqueInput";
@@ -239,6 +242,109 @@ export class AttendeeControllerBase {
       }
       throw error;
     }
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @common.Get("/:id/addresses")
+  @ApiNestedQuery(AddressFindManyArgs)
+  @nestAccessControl.UseRoles({
+    resource: "Address",
+    action: "read",
+    possession: "any",
+  })
+  async findAddresses(
+    @common.Req() request: Request,
+    @common.Param() params: AttendeeWhereUniqueInput
+  ): Promise<Address[]> {
+    const query = plainToClass(AddressFindManyArgs, request.query);
+    const results = await this.service.findAddresses(params.id, {
+      ...query,
+      select: {
+        attendee: {
+          select: {
+            id: true,
+          },
+        },
+
+        country: true,
+        createdAt: true,
+        id: true,
+        line1: true,
+        updatedAt: true,
+      },
+    });
+    if (results === null) {
+      throw new errors.NotFoundException(
+        `No resource was found for ${JSON.stringify(params)}`
+      );
+    }
+    return results;
+  }
+
+  @common.Post("/:id/addresses")
+  @nestAccessControl.UseRoles({
+    resource: "Attendee",
+    action: "update",
+    possession: "any",
+  })
+  async connectAddresses(
+    @common.Param() params: AttendeeWhereUniqueInput,
+    @common.Body() body: AddressWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      addresses: {
+        connect: body,
+      },
+    };
+    await this.service.updateAttendee({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.Patch("/:id/addresses")
+  @nestAccessControl.UseRoles({
+    resource: "Attendee",
+    action: "update",
+    possession: "any",
+  })
+  async updateAddresses(
+    @common.Param() params: AttendeeWhereUniqueInput,
+    @common.Body() body: AddressWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      addresses: {
+        set: body,
+      },
+    };
+    await this.service.updateAttendee({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.Delete("/:id/addresses")
+  @nestAccessControl.UseRoles({
+    resource: "Attendee",
+    action: "update",
+    possession: "any",
+  })
+  async disconnectAddresses(
+    @common.Param() params: AttendeeWhereUniqueInput,
+    @common.Body() body: AddressWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      addresses: {
+        disconnect: body,
+      },
+    };
+    await this.service.updateAttendee({
+      where: params,
+      data,
+      select: { id: true },
+    });
   }
 
   @common.UseInterceptors(AclFilterResponseInterceptor)
