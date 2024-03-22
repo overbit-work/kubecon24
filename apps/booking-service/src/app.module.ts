@@ -16,7 +16,6 @@ import { UserModule } from "./user/user.module";
 import { BookingModule } from "./booking/booking.module";
 import { AttendeeModule } from "./attendee/attendee.module";
 import { PromotionModule } from "./promotion/promotion.module";
-import { VenueModule } from "./venue/venue.module";
 import { HealthModule } from "./health/health.module";
 import { PrismaModule } from "./prisma/prisma.module";
 import { SecretsManagerModule } from "./providers/secrets/secretsManager.module";
@@ -40,7 +39,6 @@ import { AuthModule } from "./auth/auth.module";
     BookingModule,
     AttendeeModule,
     PromotionModule,
-    VenueModule,
     HealthModule,
     PrismaModule,
     SecretsManagerModule,
