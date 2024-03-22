@@ -11,13 +11,26 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { BookingUpdateManyWithoutAttendeesInput } from "./BookingUpdateManyWithoutAttendeesInput";
+import { AddressUpdateManyWithoutAttendeesInput } from "./AddressUpdateManyWithoutAttendeesInput";
 import { ValidateNested, IsOptional, IsString } from "class-validator";
 import { Type } from "class-transformer";
+import { BookingUpdateManyWithoutAttendeesInput } from "./BookingUpdateManyWithoutAttendeesInput";
 import { CompanyWhereUniqueInput } from "../../company/base/CompanyWhereUniqueInput";
 
 @InputType()
 class AttendeeUpdateInput {
+  @ApiProperty({
+    required: false,
+    type: () => AddressUpdateManyWithoutAttendeesInput,
+  })
+  @ValidateNested()
+  @Type(() => AddressUpdateManyWithoutAttendeesInput)
+  @IsOptional()
+  @Field(() => AddressUpdateManyWithoutAttendeesInput, {
+    nullable: true,
+  })
+  addresses?: AddressUpdateManyWithoutAttendeesInput;
+
   @ApiProperty({
     required: false,
     type: () => BookingUpdateManyWithoutAttendeesInput,

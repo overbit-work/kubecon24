@@ -49,8 +49,22 @@ export class AddressControllerBase {
     @common.Body() data: AddressCreateInput
   ): Promise<Address> {
     return await this.service.createAddress({
-      data: data,
+      data: {
+        ...data,
+
+        attendee: data.attendee
+          ? {
+              connect: data.attendee,
+            }
+          : undefined,
+      },
       select: {
+        attendee: {
+          select: {
+            id: true,
+          },
+        },
+
         country: true,
         createdAt: true,
         id: true,
@@ -77,6 +91,12 @@ export class AddressControllerBase {
     return this.service.addresses({
       ...args,
       select: {
+        attendee: {
+          select: {
+            id: true,
+          },
+        },
+
         country: true,
         createdAt: true,
         id: true,
@@ -104,6 +124,12 @@ export class AddressControllerBase {
     const result = await this.service.address({
       where: params,
       select: {
+        attendee: {
+          select: {
+            id: true,
+          },
+        },
+
         country: true,
         createdAt: true,
         id: true,
@@ -138,8 +164,22 @@ export class AddressControllerBase {
     try {
       return await this.service.updateAddress({
         where: params,
-        data: data,
+        data: {
+          ...data,
+
+          attendee: data.attendee
+            ? {
+                connect: data.attendee,
+              }
+            : undefined,
+        },
         select: {
+          attendee: {
+            select: {
+              id: true,
+            },
+          },
+
           country: true,
           createdAt: true,
           id: true,
@@ -175,6 +215,12 @@ export class AddressControllerBase {
       return await this.service.deleteAddress({
         where: params,
         select: {
+          attendee: {
+            select: {
+              id: true,
+            },
+          },
+
           country: true,
           createdAt: true,
           id: true,

@@ -26,6 +26,7 @@ import { AddressFindUniqueArgs } from "./AddressFindUniqueArgs";
 import { CreateAddressArgs } from "./CreateAddressArgs";
 import { UpdateAddressArgs } from "./UpdateAddressArgs";
 import { DeleteAddressArgs } from "./DeleteAddressArgs";
+import { Attendee } from "../../attendee/base/Attendee";
 import { AddressService } from "../address.service";
 @common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
 @graphql.Resolver(() => Address)
@@ -92,7 +93,15 @@ export class AddressResolverBase {
   ): Promise<Address> {
     return await this.service.createAddress({
       ...args,
-      data: args.data,
+      data: {
+        ...args.data,
+
+        attendee: args.data.attendee
+          ? {
+              connect: args.data.attendee,
+            }
+          : undefined,
+      },
     });
   }
 
@@ -109,7 +118,15 @@ export class AddressResolverBase {
     try {
       return await this.service.updateAddress({
         ...args,
-        data: args.data,
+        data: {
+          ...args.data,
+
+          attendee: args.data.attendee
+            ? {
+                connect: args.data.attendee,
+              }
+            : undefined,
+        },
       });
     } catch (error) {
       if (isRecordNotFoundError(error)) {
@@ -140,5 +157,26 @@ export class AddressResolverBase {
       }
       throw error;
     }
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @graphql.ResolveField(() => Attendee, {
+    nullable: true,
+    name: "attendee",
+  })
+  @nestAccessControl.UseRoles({
+    resource: "Attendee",
+    action: "read",
+    possession: "any",
+  })
+  async getAttendee(
+    @graphql.Parent() parent: Address
+  ): Promise<Attendee | null> {
+    const result = await this.service.getAttendee(parent.id);
+
+    if (!result) {
+      return null;
+    }
+    return result;
   }
 }

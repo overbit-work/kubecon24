@@ -11,15 +11,28 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { BookingListRelationFilter } from "../../booking/base/BookingListRelationFilter";
+import { AddressListRelationFilter } from "../../address/base/AddressListRelationFilter";
 import { ValidateNested, IsOptional } from "class-validator";
 import { Type } from "class-transformer";
+import { BookingListRelationFilter } from "../../booking/base/BookingListRelationFilter";
 import { CompanyWhereUniqueInput } from "../../company/base/CompanyWhereUniqueInput";
 import { StringFilter } from "../../util/StringFilter";
 import { StringNullableFilter } from "../../util/StringNullableFilter";
 
 @InputType()
 class AttendeeWhereInput {
+  @ApiProperty({
+    required: false,
+    type: () => AddressListRelationFilter,
+  })
+  @ValidateNested()
+  @Type(() => AddressListRelationFilter)
+  @IsOptional()
+  @Field(() => AddressListRelationFilter, {
+    nullable: true,
+  })
+  addresses?: AddressListRelationFilter;
+
   @ApiProperty({
     required: false,
     type: () => BookingListRelationFilter,

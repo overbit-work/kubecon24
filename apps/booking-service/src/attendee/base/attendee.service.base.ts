@@ -14,6 +14,7 @@ import { PrismaService } from "../../prisma/prisma.service";
 import {
   Prisma,
   Attendee, // @ts-ignore
+  Address, // @ts-ignore
   Booking, // @ts-ignore
   Company,
 } from "@prisma/client";
@@ -51,6 +52,17 @@ export class AttendeeServiceBase {
     args: Prisma.SelectSubset<T, Prisma.AttendeeDeleteArgs>
   ): Promise<Attendee> {
     return this.prisma.attendee.delete(args);
+  }
+
+  async findAddresses(
+    parentId: string,
+    args: Prisma.AddressFindManyArgs
+  ): Promise<Address[]> {
+    return this.prisma.attendee
+      .findUniqueOrThrow({
+        where: { id: parentId },
+      })
+      .addresses(args);
   }
 
   async findBookings(

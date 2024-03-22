@@ -30,6 +30,7 @@ model Booking {
 }
 
 model Attendee {
+  addresses Address[]
   bookings  Booking[]
   company   Company?  @relation(fields: [companyId], references: [id])
   companyId String?
@@ -58,9 +59,11 @@ model Company {
 }
 
 model Address {
-  country   String?
-  createdAt DateTime @default(now())
-  id        String   @id @default(cuid())
-  line1     String?
-  updatedAt DateTime @updatedAt
+  attendee   Attendee? @relation(fields: [attendeeId], references: [id])
+  attendeeId String?
+  country    String?
+  createdAt  DateTime  @default(now())
+  id         String    @id @default(cuid())
+  line1      String?
+  updatedAt  DateTime  @updatedAt
 }

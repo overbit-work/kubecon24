@@ -11,10 +11,24 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsOptional } from "class-validator";
+import { AttendeeWhereUniqueInput } from "../../attendee/base/AttendeeWhereUniqueInput";
+import { ValidateNested, IsOptional, IsString } from "class-validator";
+import { Type } from "class-transformer";
 
 @InputType()
 class AddressUpdateInput {
+  @ApiProperty({
+    required: false,
+    type: () => AttendeeWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => AttendeeWhereUniqueInput)
+  @IsOptional()
+  @Field(() => AttendeeWhereUniqueInput, {
+    nullable: true,
+  })
+  attendee?: AttendeeWhereUniqueInput | null;
+
   @ApiProperty({
     required: false,
     type: String,
