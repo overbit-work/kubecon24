@@ -30,10 +30,13 @@ import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { ACLModule } from "./auth/acl.module";
 import { AuthModule } from "./auth/auth.module";
 
+import { LoggerModule } from "./logger/logger.module";
+
 @Module({
   controllers: [],
   imports: [
     RabbitMQModule,
+    LoggerModule,
     ACLModule,
     AuthModule,
     UserModule,
