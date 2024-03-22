@@ -1,13 +1,25 @@
+import { RabbitMQModule } from "./rabbitmq/rabbitmq.module";
 import { Module } from "@nestjs/common";
+
+import {
+  OpenTelemetryModule,
+  PipeInjector,
+  ControllerInjector,
+  EventEmitterInjector,
+  GraphQLResolverInjector,
+  GuardInjector,
+} from "@amplication/opentelemetry-nestjs";
+
+import { HttpInstrumentation } from "@opentelemetry/instrumentation-http";
+import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-grpc";
+import { BatchSpanProcessor } from "@opentelemetry/sdk-trace-node";
 import { UserModule } from "./user/user.module";
 import { BookingModule } from "./booking/booking.module";
 import { AttendeeModule } from "./attendee/attendee.module";
 import { PromotionModule } from "./promotion/promotion.module";
-import { VenueModule } from "./venue/venue.module";
 import { HealthModule } from "./health/health.module";
 import { PrismaModule } from "./prisma/prisma.module";
 import { SecretsManagerModule } from "./providers/secrets/secretsManager.module";
-import { KafkaModule } from "./kafka/kafka.module";
 import { ServeStaticModule } from "@nestjs/serve-static";
 import { ServeStaticOptionsService } from "./serveStaticOptions.service";
 import { ConfigModule, ConfigService } from "@nestjs/config";
@@ -20,14 +32,13 @@ import { AuthModule } from "./auth/auth.module";
 @Module({
   controllers: [],
   imports: [
-    KafkaModule,
+    RabbitMQModule,
     ACLModule,
     AuthModule,
     UserModule,
     BookingModule,
     AttendeeModule,
     PromotionModule,
-    VenueModule,
     HealthModule,
     PrismaModule,
     SecretsManagerModule,
@@ -49,6 +60,26 @@ import { AuthModule } from "./auth/auth.module";
       },
       inject: [ConfigService],
       imports: [ConfigModule],
+    }),
+    OpenTelemetryModule.forRoot({
+      serviceName: "booking-service",
+      spanProcessor: new BatchSpanProcessor(new OTLPTraceExporter()),
+      instrumentations: [
+        new HttpInstrumentation({
+          requestHook: (span, request) => {
+            if (request.method)
+              span.setAttribute("http.method", request.method);
+          },
+        }),
+      ],
+
+      traceAutoInjectors: [
+        ControllerInjector,
+        EventEmitterInjector,
+        GraphQLResolverInjector,
+        GuardInjector,
+        PipeInjector,
+      ],
     }),
   ],
   providers: [],

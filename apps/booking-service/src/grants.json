@@ -118,35 +118,5 @@
     "resource": "Promotion",
     "action": "read:any",
     "attributes": "*"
-  },
-  {
-    "role": "user",
-    "resource": "Venue",
-    "action": "read:own",
-    "attributes": "*"
-  },
-  {
-    "role": "user",
-    "resource": "Venue",
-    "action": "create:any",
-    "attributes": "*"
-  },
-  {
-    "role": "user",
-    "resource": "Venue",
-    "action": "update:any",
-    "attributes": "*"
-  },
-  {
-    "role": "user",
-    "resource": "Venue",
-    "action": "delete:any",
-    "attributes": "*"
-  },
-  {
-    "role": "user",
-    "resource": "Venue",
-    "action": "read:any",
-    "attributes": "*"
   }
 ]

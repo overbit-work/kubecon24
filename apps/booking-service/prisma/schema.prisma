@@ -46,11 +46,3 @@ model Promotion {
   id         String    @id @default(cuid())
   updatedAt  DateTime  @updatedAt
 }
-
-model Venue {
-  createdAt DateTime @default(now())
-  id        String   @id @default(cuid())
-  location  String?
-  name      String?
-  updatedAt DateTime @updatedAt
-}
