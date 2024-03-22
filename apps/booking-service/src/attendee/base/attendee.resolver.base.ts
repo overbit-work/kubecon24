@@ -28,6 +28,7 @@ import { UpdateAttendeeArgs } from "./UpdateAttendeeArgs";
 import { DeleteAttendeeArgs } from "./DeleteAttendeeArgs";
 import { BookingFindManyArgs } from "../../booking/base/BookingFindManyArgs";
 import { Booking } from "../../booking/base/Booking";
+import { Company } from "../../company/base/Company";
 import { AttendeeService } from "../attendee.service";
 @common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
 @graphql.Resolver(() => Attendee)
@@ -94,7 +95,15 @@ export class AttendeeResolverBase {
   ): Promise<Attendee> {
     return await this.service.createAttendee({
       ...args,
-      data: args.data,
+      data: {
+        ...args.data,
+
+        company: args.data.company
+          ? {
+              connect: args.data.company,
+            }
+          : undefined,
+      },
     });
   }
 
@@ -111,7 +120,15 @@ export class AttendeeResolverBase {
     try {
       return await this.service.updateAttendee({
         ...args,
-        data: args.data,
+        data: {
+          ...args.data,
+
+          company: args.data.company
+            ? {
+                connect: args.data.company,
+              }
+            : undefined,
+        },
       });
     } catch (error) {
       if (isRecordNotFoundError(error)) {
@@ -162,5 +179,26 @@ export class AttendeeResolverBase {
     }
 
     return results;
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @graphql.ResolveField(() => Company, {
+    nullable: true,
+    name: "company",
+  })
+  @nestAccessControl.UseRoles({
+    resource: "Company",
+    action: "read",
+    possession: "any",
+  })
+  async getCompany(
+    @graphql.Parent() parent: Attendee
+  ): Promise<Company | null> {
+    const result = await this.service.getCompany(parent.id);
+
+    if (!result) {
+      return null;
+    }
+    return result;
   }
 }

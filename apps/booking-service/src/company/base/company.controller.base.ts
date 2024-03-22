@@ -18,60 +18,45 @@ import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import * as nestAccessControl from "nest-access-control";
 import * as defaultAuthGuard from "../../auth/defaultAuth.guard";
-import { AttendeeService } from "../attendee.service";
+import { CompanyService } from "../company.service";
 import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
 import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
-import { AttendeeCreateInput } from "./AttendeeCreateInput";
-import { Attendee } from "./Attendee";
-import { AttendeeFindManyArgs } from "./AttendeeFindManyArgs";
-import { AttendeeWhereUniqueInput } from "./AttendeeWhereUniqueInput";
-import { AttendeeUpdateInput } from "./AttendeeUpdateInput";
-import { BookingFindManyArgs } from "../../booking/base/BookingFindManyArgs";
-import { Booking } from "../../booking/base/Booking";
-import { BookingWhereUniqueInput } from "../../booking/base/BookingWhereUniqueInput";
+import { CompanyCreateInput } from "./CompanyCreateInput";
+import { Company } from "./Company";
+import { CompanyFindManyArgs } from "./CompanyFindManyArgs";
+import { CompanyWhereUniqueInput } from "./CompanyWhereUniqueInput";
+import { CompanyUpdateInput } from "./CompanyUpdateInput";
+import { AttendeeFindManyArgs } from "../../attendee/base/AttendeeFindManyArgs";
+import { Attendee } from "../../attendee/base/Attendee";
+import { AttendeeWhereUniqueInput } from "../../attendee/base/AttendeeWhereUniqueInput";
 
 @swagger.ApiBearerAuth()
 @common.UseGuards(defaultAuthGuard.DefaultAuthGuard, nestAccessControl.ACGuard)
-export class AttendeeControllerBase {
+export class CompanyControllerBase {
   constructor(
-    protected readonly service: AttendeeService,
+    protected readonly service: CompanyService,
     protected readonly rolesBuilder: nestAccessControl.RolesBuilder
   ) {}
   @common.UseInterceptors(AclValidateRequestInterceptor)
   @common.Post()
-  @swagger.ApiCreatedResponse({ type: Attendee })
+  @swagger.ApiCreatedResponse({ type: Company })
   @nestAccessControl.UseRoles({
-    resource: "Attendee",
+    resource: "Company",
     action: "create",
     possession: "any",
   })
   @swagger.ApiForbiddenResponse({
     type: errors.ForbiddenException,
   })
-  async createAttendee(
-    @common.Body() data: AttendeeCreateInput
-  ): Promise<Attendee> {
-    return await this.service.createAttendee({
-      data: {
-        ...data,
-
-        company: data.company
-          ? {
-              connect: data.company,
-            }
-          : undefined,
-      },
+  async createCompany(
+    @common.Body() data: CompanyCreateInput
+  ): Promise<Company> {
+    return await this.service.createCompany({
+      data: data,
       select: {
-        company: {
-          select: {
-            id: true,
-          },
-        },
-
         createdAt: true,
         id: true,
         name: true,
-        surnam: true,
         updatedAt: true,
       },
     });
@@ -79,31 +64,24 @@ export class AttendeeControllerBase {
 
   @common.UseInterceptors(AclFilterResponseInterceptor)
   @common.Get()
-  @swagger.ApiOkResponse({ type: [Attendee] })
-  @ApiNestedQuery(AttendeeFindManyArgs)
+  @swagger.ApiOkResponse({ type: [Company] })
+  @ApiNestedQuery(CompanyFindManyArgs)
   @nestAccessControl.UseRoles({
-    resource: "Attendee",
+    resource: "Company",
     action: "read",
     possession: "any",
   })
   @swagger.ApiForbiddenResponse({
     type: errors.ForbiddenException,
   })
-  async attendees(@common.Req() request: Request): Promise<Attendee[]> {
-    const args = plainToClass(AttendeeFindManyArgs, request.query);
-    return this.service.attendees({
+  async companies(@common.Req() request: Request): Promise<Company[]> {
+    const args = plainToClass(CompanyFindManyArgs, request.query);
+    return this.service.companies({
       ...args,
       select: {
-        company: {
-          select: {
-            id: true,
-          },
-        },
-
         createdAt: true,
         id: true,
         name: true,
-        surnam: true,
         updatedAt: true,
       },
     });
@@ -111,32 +89,25 @@ export class AttendeeControllerBase {
 
   @common.UseInterceptors(AclFilterResponseInterceptor)
   @common.Get("/:id")
-  @swagger.ApiOkResponse({ type: Attendee })
+  @swagger.ApiOkResponse({ type: Company })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
   @nestAccessControl.UseRoles({
-    resource: "Attendee",
+    resource: "Company",
     action: "read",
     possession: "own",
   })
   @swagger.ApiForbiddenResponse({
     type: errors.ForbiddenException,
   })
-  async attendee(
-    @common.Param() params: AttendeeWhereUniqueInput
-  ): Promise<Attendee | null> {
-    const result = await this.service.attendee({
+  async company(
+    @common.Param() params: CompanyWhereUniqueInput
+  ): Promise<Company | null> {
+    const result = await this.service.company({
       where: params,
       select: {
-        company: {
-          select: {
-            id: true,
-          },
-        },
-
         createdAt: true,
         id: true,
         name: true,
-        surnam: true,
         updatedAt: true,
       },
     });
@@ -150,43 +121,28 @@ export class AttendeeControllerBase {
 
   @common.UseInterceptors(AclValidateRequestInterceptor)
   @common.Patch("/:id")
-  @swagger.ApiOkResponse({ type: Attendee })
+  @swagger.ApiOkResponse({ type: Company })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
   @nestAccessControl.UseRoles({
-    resource: "Attendee",
+    resource: "Company",
     action: "update",
     possession: "any",
   })
   @swagger.ApiForbiddenResponse({
     type: errors.ForbiddenException,
   })
-  async updateAttendee(
-    @common.Param() params: AttendeeWhereUniqueInput,
-    @common.Body() data: AttendeeUpdateInput
-  ): Promise<Attendee | null> {
+  async updateCompany(
+    @common.Param() params: CompanyWhereUniqueInput,
+    @common.Body() data: CompanyUpdateInput
+  ): Promise<Company | null> {
     try {
-      return await this.service.updateAttendee({
+      return await this.service.updateCompany({
         where: params,
-        data: {
-          ...data,
-
-          company: data.company
-            ? {
-                connect: data.company,
-              }
-            : undefined,
-        },
+        data: data,
         select: {
-          company: {
-            select: {
-              id: true,
-            },
-          },
-
           createdAt: true,
           id: true,
           name: true,
-          surnam: true,
           updatedAt: true,
         },
       });
@@ -201,33 +157,26 @@ export class AttendeeControllerBase {
   }
 
   @common.Delete("/:id")
-  @swagger.ApiOkResponse({ type: Attendee })
+  @swagger.ApiOkResponse({ type: Company })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
   @nestAccessControl.UseRoles({
-    resource: "Attendee",
+    resource: "Company",
     action: "delete",
     possession: "any",
   })
   @swagger.ApiForbiddenResponse({
     type: errors.ForbiddenException,
   })
-  async deleteAttendee(
-    @common.Param() params: AttendeeWhereUniqueInput
-  ): Promise<Attendee | null> {
+  async deleteCompany(
+    @common.Param() params: CompanyWhereUniqueInput
+  ): Promise<Company | null> {
     try {
-      return await this.service.deleteAttendee({
+      return await this.service.deleteCompany({
         where: params,
         select: {
-          company: {
-            select: {
-              id: true,
-            },
-          },
-
           createdAt: true,
           id: true,
           name: true,
-          surnam: true,
           updatedAt: true,
         },
       });
@@ -242,22 +191,22 @@ export class AttendeeControllerBase {
   }
 
   @common.UseInterceptors(AclFilterResponseInterceptor)
-  @common.Get("/:id/bookings")
-  @ApiNestedQuery(BookingFindManyArgs)
+  @common.Get("/:id/attendees")
+  @ApiNestedQuery(AttendeeFindManyArgs)
   @nestAccessControl.UseRoles({
-    resource: "Booking",
+    resource: "Attendee",
     action: "read",
     possession: "any",
   })
-  async findBookings(
+  async findAttendees(
     @common.Req() request: Request,
-    @common.Param() params: AttendeeWhereUniqueInput
-  ): Promise<Booking[]> {
-    const query = plainToClass(BookingFindManyArgs, request.query);
-    const results = await this.service.findBookings(params.id, {
+    @common.Param() params: CompanyWhereUniqueInput
+  ): Promise<Attendee[]> {
+    const query = plainToClass(AttendeeFindManyArgs, request.query);
+    const results = await this.service.findAttendees(params.id, {
       ...query,
       select: {
-        attendee: {
+        company: {
           select: {
             id: true,
           },
@@ -265,13 +214,8 @@ export class AttendeeControllerBase {
 
         createdAt: true,
         id: true,
-
-        promotions: {
-          select: {
-            id: true,
-          },
-        },
-
+        name: true,
+        surnam: true,
         updatedAt: true,
       },
     });
@@ -283,66 +227,66 @@ export class AttendeeControllerBase {
     return results;
   }
 
-  @common.Post("/:id/bookings")
+  @common.Post("/:id/attendees")
   @nestAccessControl.UseRoles({
-    resource: "Attendee",
+    resource: "Company",
     action: "update",
     possession: "any",
   })
-  async connectBookings(
-    @common.Param() params: AttendeeWhereUniqueInput,
-    @common.Body() body: BookingWhereUniqueInput[]
+  async connectAttendees(
+    @common.Param() params: CompanyWhereUniqueInput,
+    @common.Body() body: AttendeeWhereUniqueInput[]
   ): Promise<void> {
     const data = {
-      bookings: {
+      attendees: {
         connect: body,
       },
     };
-    await this.service.updateAttendee({
+    await this.service.updateCompany({
       where: params,
       data,
       select: { id: true },
     });
   }
 
-  @common.Patch("/:id/bookings")
+  @common.Patch("/:id/attendees")
   @nestAccessControl.UseRoles({
-    resource: "Attendee",
+    resource: "Company",
     action: "update",
     possession: "any",
   })
-  async updateBookings(
-    @common.Param() params: AttendeeWhereUniqueInput,
-    @common.Body() body: BookingWhereUniqueInput[]
+  async updateAttendees(
+    @common.Param() params: CompanyWhereUniqueInput,
+    @common.Body() body: AttendeeWhereUniqueInput[]
   ): Promise<void> {
     const data = {
-      bookings: {
+      attendees: {
         set: body,
       },
     };
-    await this.service.updateAttendee({
+    await this.service.updateCompany({
       where: params,
       data,
       select: { id: true },
     });
   }
 
-  @common.Delete("/:id/bookings")
+  @common.Delete("/:id/attendees")
   @nestAccessControl.UseRoles({
-    resource: "Attendee",
+    resource: "Company",
     action: "update",
     possession: "any",
   })
-  async disconnectBookings(
-    @common.Param() params: AttendeeWhereUniqueInput,
-    @common.Body() body: BookingWhereUniqueInput[]
+  async disconnectAttendees(
+    @common.Param() params: CompanyWhereUniqueInput,
+    @common.Body() body: AttendeeWhereUniqueInput[]
   ): Promise<void> {
     const data = {
-      bookings: {
+      attendees: {
         disconnect: body,
       },
     };
-    await this.service.updateAttendee({
+    await this.service.updateCompany({
       where: params,
       data,
       select: { id: true },

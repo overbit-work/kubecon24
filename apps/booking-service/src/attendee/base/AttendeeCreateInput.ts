@@ -14,6 +14,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { BookingCreateNestedManyWithoutAttendeesInput } from "./BookingCreateNestedManyWithoutAttendeesInput";
 import { ValidateNested, IsOptional, IsString } from "class-validator";
 import { Type } from "class-transformer";
+import { CompanyWhereUniqueInput } from "../../company/base/CompanyWhereUniqueInput";
 
 @InputType()
 class AttendeeCreateInput {
@@ -28,6 +29,18 @@ class AttendeeCreateInput {
     nullable: true,
   })
   bookings?: BookingCreateNestedManyWithoutAttendeesInput;
+
+  @ApiProperty({
+    required: false,
+    type: () => CompanyWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => CompanyWhereUniqueInput)
+  @IsOptional()
+  @Field(() => CompanyWhereUniqueInput, {
+    nullable: true,
+  })
+  company?: CompanyWhereUniqueInput | null;
 
   @ApiProperty({
     required: false,

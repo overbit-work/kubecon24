@@ -18,18 +18,7 @@ import { SortOrder } from "../../util/SortOrder";
   isAbstract: true,
   description: undefined,
 })
-class AttendeeOrderByInput {
-  @ApiProperty({
-    required: false,
-    enum: ["asc", "desc"],
-  })
-  @IsOptional()
-  @IsEnum(SortOrder)
-  @Field(() => SortOrder, {
-    nullable: true,
-  })
-  companyId?: SortOrder;
-
+class CompanyOrderByInput {
   @ApiProperty({
     required: false,
     enum: ["asc", "desc"],
@@ -72,18 +61,7 @@ class AttendeeOrderByInput {
   @Field(() => SortOrder, {
     nullable: true,
   })
-  surnam?: SortOrder;
-
-  @ApiProperty({
-    required: false,
-    enum: ["asc", "desc"],
-  })
-  @IsOptional()
-  @IsEnum(SortOrder)
-  @Field(() => SortOrder, {
-    nullable: true,
-  })
   updatedAt?: SortOrder;
 }
 
-export { AttendeeOrderByInput as AttendeeOrderByInput };
+export { CompanyOrderByInput as CompanyOrderByInput };
