@@ -62,12 +62,6 @@
   {
     "role": "user",
     "resource": "Attendee",
-    "action": "read:own",
-    "attributes": "*"
-  },
-  {
-    "role": "user",
-    "resource": "Attendee",
     "action": "create:any",
     "attributes": "*"
   },
@@ -146,6 +140,30 @@
   {
     "role": "user",
     "resource": "Company",
+    "action": "read:any",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
+    "resource": "Address",
+    "action": "read:own",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
+    "resource": "Address",
+    "action": "update:any",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
+    "resource": "Address",
+    "action": "delete:any",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
+    "resource": "Address",
     "action": "read:any",
     "attributes": "*"
   }

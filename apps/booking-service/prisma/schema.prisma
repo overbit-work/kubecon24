@@ -56,3 +56,11 @@ model Company {
   name      String?
   updatedAt DateTime   @updatedAt
 }
+
+model Address {
+  country   String?
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  line1     String?
+  updatedAt DateTime @updatedAt
+}

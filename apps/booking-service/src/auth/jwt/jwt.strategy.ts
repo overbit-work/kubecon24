@@ -40,7 +40,7 @@ export class JwtStrategy extends JwtStrategyBase implements IAuthStrategy {
     const userFields = payload;
     const defaultData = {
       email: userFields.email,
-      password: "91a4d17ca54fc4c1611e",
+      password: "ecb13702fe27dc3b9457",
       roles: ["user"],
       username: "admin",
     };
