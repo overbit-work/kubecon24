@@ -152,12 +152,6 @@
   {
     "role": "user",
     "resource": "Address",
-    "action": "create:any",
-    "attributes": "*"
-  },
-  {
-    "role": "user",
-    "resource": "Address",
     "action": "update:any",
     "attributes": "*"
   },
