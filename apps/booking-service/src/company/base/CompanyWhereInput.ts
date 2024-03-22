@@ -11,38 +11,25 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { BookingListRelationFilter } from "../../booking/base/BookingListRelationFilter";
+import { AttendeeListRelationFilter } from "../../attendee/base/AttendeeListRelationFilter";
 import { ValidateNested, IsOptional } from "class-validator";
 import { Type } from "class-transformer";
-import { CompanyWhereUniqueInput } from "../../company/base/CompanyWhereUniqueInput";
 import { StringFilter } from "../../util/StringFilter";
 import { StringNullableFilter } from "../../util/StringNullableFilter";
 
 @InputType()
-class AttendeeWhereInput {
+class CompanyWhereInput {
   @ApiProperty({
     required: false,
-    type: () => BookingListRelationFilter,
+    type: () => AttendeeListRelationFilter,
   })
   @ValidateNested()
-  @Type(() => BookingListRelationFilter)
+  @Type(() => AttendeeListRelationFilter)
   @IsOptional()
-  @Field(() => BookingListRelationFilter, {
+  @Field(() => AttendeeListRelationFilter, {
     nullable: true,
   })
-  bookings?: BookingListRelationFilter;
-
-  @ApiProperty({
-    required: false,
-    type: () => CompanyWhereUniqueInput,
-  })
-  @ValidateNested()
-  @Type(() => CompanyWhereUniqueInput)
-  @IsOptional()
-  @Field(() => CompanyWhereUniqueInput, {
-    nullable: true,
-  })
-  company?: CompanyWhereUniqueInput;
+  attendees?: AttendeeListRelationFilter;
 
   @ApiProperty({
     required: false,
@@ -65,17 +52,6 @@ class AttendeeWhereInput {
     nullable: true,
   })
   name?: StringNullableFilter;
-
-  @ApiProperty({
-    required: false,
-    type: StringNullableFilter,
-  })
-  @Type(() => StringNullableFilter)
-  @IsOptional()
-  @Field(() => StringNullableFilter, {
-    nullable: true,
-  })
-  surnam?: StringNullableFilter;
 }
 
-export { AttendeeWhereInput as AttendeeWhereInput };
+export { CompanyWhereInput as CompanyWhereInput };

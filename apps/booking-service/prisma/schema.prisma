@@ -31,6 +31,8 @@ model Booking {
 
 model Attendee {
   bookings  Booking[]
+  company   Company?  @relation(fields: [companyId], references: [id])
+  companyId String?
   createdAt DateTime  @default(now())
   id        String    @id @default(cuid())
   name      String?
@@ -45,4 +47,12 @@ model Promotion {
   expiryDate DateTime?
   id         String    @id @default(cuid())
   updatedAt  DateTime  @updatedAt
+}
+
+model Company {
+  attendees Attendee[]
+  createdAt DateTime   @default(now())
+  id        String     @id @default(cuid())
+  name      String?
+  updatedAt DateTime   @updatedAt
 }

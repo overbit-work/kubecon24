@@ -14,7 +14,8 @@ import { PrismaService } from "../../prisma/prisma.service";
 import {
   Prisma,
   Attendee, // @ts-ignore
-  Booking,
+  Booking, // @ts-ignore
+  Company,
 } from "@prisma/client";
 
 export class AttendeeServiceBase {
@@ -61,5 +62,13 @@ export class AttendeeServiceBase {
         where: { id: parentId },
       })
       .bookings(args);
+  }
+
+  async getCompany(parentId: string): Promise<Company | null> {
+    return this.prisma.attendee
+      .findUnique({
+        where: { id: parentId },
+      })
+      .company();
   }
 }
