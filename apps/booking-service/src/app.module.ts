@@ -18,6 +18,7 @@ import { BookingModule } from "./booking/booking.module";
 import { AttendeeModule } from "./attendee/attendee.module";
 import { PromotionModule } from "./promotion/promotion.module";
 import { CompanyModule } from "./company/company.module";
+import { AddressModule } from "./address/address.module";
 import { HealthModule } from "./health/health.module";
 import { PrismaModule } from "./prisma/prisma.module";
 import { SecretsManagerModule } from "./providers/secrets/secretsManager.module";
@@ -44,6 +45,7 @@ import { LoggerModule } from "./logger/logger.module";
     AttendeeModule,
     PromotionModule,
     CompanyModule,
+    AddressModule,
     HealthModule,
     PrismaModule,
     SecretsManagerModule,
