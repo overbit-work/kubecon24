@@ -19,12 +19,6 @@ variables:
     SERVICE_NAME: "booking-service"
     LOG_REQUEST: "false"
     PINO_PRETTY: "false"
-    KEYCLOAK_URL: "http://localhost:8080"
-    KEYCLOAK_REALM: "amplication-sample-realm"
-    KEYCLOAK_CLIENT_ID: "amplication-server"
-    KEYCLOAK_ADMIN_USERNAME: "admin"
-    KEYCLOAK_ADMIN_PASSWORD: "password"
-    KEYCLOAK_PORT: "8080"
   secret: {}
 
 imagePullSecrets: []

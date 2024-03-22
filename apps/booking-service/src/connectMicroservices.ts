@@ -1,13 +1,9 @@
 import { INestApplication } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { generateRabbitMQClientOptions } from "./rabbitmq/generateRabbitMQClientOptions";
+import { generateKafkaClientOptions } from "./kafka/generateKafkaClientOptions";
 import { MicroserviceOptions } from "@nestjs/microservices";
-import { RabbitMQ } from "./rabbitmq/rabbitmq.transport";
 
 export async function connectMicroservices(app: INestApplication) {
   const configService = app.get(ConfigService);
-
-  app.connectMicroservice<MicroserviceOptions>({
-    strategy: new RabbitMQ(generateRabbitMQClientOptions(configService, "topic.sample.v1").options)
-  });
+  app.connectMicroservice<MicroserviceOptions>(generateKafkaClientOptions(configService));
 }
