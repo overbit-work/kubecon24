@@ -10,49 +10,46 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "../../prisma/prisma.service";
-
 import {
   Prisma,
-  Address, // @ts-ignore
-  Attendee,
+  Address as PrismaAddress,
+  Attendee as PrismaAttendee,
 } from "@prisma/client";
 
 export class AddressServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
 
-  async count<T extends Prisma.AddressCountArgs>(
-    args: Prisma.SelectSubset<T, Prisma.AddressCountArgs>
-  ): Promise<number> {
+  async count(args: Omit<Prisma.AddressCountArgs, "select">): Promise<number> {
     return this.prisma.address.count(args);
   }
 
   async addresses<T extends Prisma.AddressFindManyArgs>(
     args: Prisma.SelectSubset<T, Prisma.AddressFindManyArgs>
-  ): Promise<Address[]> {
-    return this.prisma.address.findMany(args);
+  ): Promise<PrismaAddress[]> {
+    return this.prisma.address.findMany<Prisma.AddressFindManyArgs>(args);
   }
   async address<T extends Prisma.AddressFindUniqueArgs>(
     args: Prisma.SelectSubset<T, Prisma.AddressFindUniqueArgs>
-  ): Promise<Address | null> {
+  ): Promise<PrismaAddress | null> {
     return this.prisma.address.findUnique(args);
   }
   async createAddress<T extends Prisma.AddressCreateArgs>(
     args: Prisma.SelectSubset<T, Prisma.AddressCreateArgs>
-  ): Promise<Address> {
+  ): Promise<PrismaAddress> {
     return this.prisma.address.create<T>(args);
   }
   async updateAddress<T extends Prisma.AddressUpdateArgs>(
     args: Prisma.SelectSubset<T, Prisma.AddressUpdateArgs>
-  ): Promise<Address> {
+  ): Promise<PrismaAddress> {
     return this.prisma.address.update<T>(args);
   }
   async deleteAddress<T extends Prisma.AddressDeleteArgs>(
     args: Prisma.SelectSubset<T, Prisma.AddressDeleteArgs>
-  ): Promise<Address> {
+  ): Promise<PrismaAddress> {
     return this.prisma.address.delete(args);
   }
 
-  async getAttendee(parentId: string): Promise<Attendee | null> {
+  async getAttendee(parentId: string): Promise<PrismaAttendee | null> {
     return this.prisma.address
       .findUnique({
         where: { id: parentId },

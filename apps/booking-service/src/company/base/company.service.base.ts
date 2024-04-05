@@ -10,52 +10,49 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "../../prisma/prisma.service";
-
 import {
   Prisma,
-  Company, // @ts-ignore
-  Attendee,
+  Company as PrismaCompany,
+  Attendee as PrismaAttendee,
 } from "@prisma/client";
 
 export class CompanyServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
 
-  async count<T extends Prisma.CompanyCountArgs>(
-    args: Prisma.SelectSubset<T, Prisma.CompanyCountArgs>
-  ): Promise<number> {
+  async count(args: Omit<Prisma.CompanyCountArgs, "select">): Promise<number> {
     return this.prisma.company.count(args);
   }
 
   async companies<T extends Prisma.CompanyFindManyArgs>(
     args: Prisma.SelectSubset<T, Prisma.CompanyFindManyArgs>
-  ): Promise<Company[]> {
-    return this.prisma.company.findMany(args);
+  ): Promise<PrismaCompany[]> {
+    return this.prisma.company.findMany<Prisma.CompanyFindManyArgs>(args);
   }
   async company<T extends Prisma.CompanyFindUniqueArgs>(
     args: Prisma.SelectSubset<T, Prisma.CompanyFindUniqueArgs>
-  ): Promise<Company | null> {
+  ): Promise<PrismaCompany | null> {
     return this.prisma.company.findUnique(args);
   }
   async createCompany<T extends Prisma.CompanyCreateArgs>(
     args: Prisma.SelectSubset<T, Prisma.CompanyCreateArgs>
-  ): Promise<Company> {
+  ): Promise<PrismaCompany> {
     return this.prisma.company.create<T>(args);
   }
   async updateCompany<T extends Prisma.CompanyUpdateArgs>(
     args: Prisma.SelectSubset<T, Prisma.CompanyUpdateArgs>
-  ): Promise<Company> {
+  ): Promise<PrismaCompany> {
     return this.prisma.company.update<T>(args);
   }
   async deleteCompany<T extends Prisma.CompanyDeleteArgs>(
     args: Prisma.SelectSubset<T, Prisma.CompanyDeleteArgs>
-  ): Promise<Company> {
+  ): Promise<PrismaCompany> {
     return this.prisma.company.delete(args);
   }
 
   async findAttendees(
     parentId: string,
     args: Prisma.AttendeeFindManyArgs
-  ): Promise<Attendee[]> {
+  ): Promise<PrismaAttendee[]> {
     return this.prisma.company
       .findUniqueOrThrow({
         where: { id: parentId },

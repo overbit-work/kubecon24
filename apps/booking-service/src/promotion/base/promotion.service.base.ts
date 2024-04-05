@@ -10,49 +10,48 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "../../prisma/prisma.service";
-
 import {
   Prisma,
-  Promotion, // @ts-ignore
-  Booking,
+  Promotion as PrismaPromotion,
+  Booking as PrismaBooking,
 } from "@prisma/client";
 
 export class PromotionServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
 
-  async count<T extends Prisma.PromotionCountArgs>(
-    args: Prisma.SelectSubset<T, Prisma.PromotionCountArgs>
+  async count(
+    args: Omit<Prisma.PromotionCountArgs, "select">
   ): Promise<number> {
     return this.prisma.promotion.count(args);
   }
 
   async promotions<T extends Prisma.PromotionFindManyArgs>(
     args: Prisma.SelectSubset<T, Prisma.PromotionFindManyArgs>
-  ): Promise<Promotion[]> {
-    return this.prisma.promotion.findMany(args);
+  ): Promise<PrismaPromotion[]> {
+    return this.prisma.promotion.findMany<Prisma.PromotionFindManyArgs>(args);
   }
   async promotion<T extends Prisma.PromotionFindUniqueArgs>(
     args: Prisma.SelectSubset<T, Prisma.PromotionFindUniqueArgs>
-  ): Promise<Promotion | null> {
+  ): Promise<PrismaPromotion | null> {
     return this.prisma.promotion.findUnique(args);
   }
   async createPromotion<T extends Prisma.PromotionCreateArgs>(
     args: Prisma.SelectSubset<T, Prisma.PromotionCreateArgs>
-  ): Promise<Promotion> {
+  ): Promise<PrismaPromotion> {
     return this.prisma.promotion.create<T>(args);
   }
   async updatePromotion<T extends Prisma.PromotionUpdateArgs>(
     args: Prisma.SelectSubset<T, Prisma.PromotionUpdateArgs>
-  ): Promise<Promotion> {
+  ): Promise<PrismaPromotion> {
     return this.prisma.promotion.update<T>(args);
   }
   async deletePromotion<T extends Prisma.PromotionDeleteArgs>(
     args: Prisma.SelectSubset<T, Prisma.PromotionDeleteArgs>
-  ): Promise<Promotion> {
+  ): Promise<PrismaPromotion> {
     return this.prisma.promotion.delete(args);
   }
 
-  async getBooking(parentId: string): Promise<Booking | null> {
+  async getBooking(parentId: string): Promise<PrismaBooking | null> {
     return this.prisma.promotion
       .findUnique({
         where: { id: parentId },

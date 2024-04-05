@@ -13,51 +13,49 @@ import { PrismaService } from "../../prisma/prisma.service";
 
 import {
   Prisma,
-  Attendee, // @ts-ignore
-  Address, // @ts-ignore
-  Booking, // @ts-ignore
-  Company,
+  Attendee as PrismaAttendee,
+  Address as PrismaAddress,
+  Booking as PrismaBooking,
+  Company as PrismaCompany,
 } from "@prisma/client";
 
 export class AttendeeServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
 
-  async count<T extends Prisma.AttendeeCountArgs>(
-    args: Prisma.SelectSubset<T, Prisma.AttendeeCountArgs>
-  ): Promise<number> {
+  async count(args: Omit<Prisma.AttendeeCountArgs, "select">): Promise<number> {
     return this.prisma.attendee.count(args);
   }
 
   async attendees<T extends Prisma.AttendeeFindManyArgs>(
     args: Prisma.SelectSubset<T, Prisma.AttendeeFindManyArgs>
-  ): Promise<Attendee[]> {
-    return this.prisma.attendee.findMany(args);
+  ): Promise<PrismaAttendee[]> {
+    return this.prisma.attendee.findMany<Prisma.AttendeeFindManyArgs>(args);
   }
   async attendee<T extends Prisma.AttendeeFindUniqueArgs>(
     args: Prisma.SelectSubset<T, Prisma.AttendeeFindUniqueArgs>
-  ): Promise<Attendee | null> {
+  ): Promise<PrismaAttendee | null> {
     return this.prisma.attendee.findUnique(args);
   }
   async createAttendee<T extends Prisma.AttendeeCreateArgs>(
     args: Prisma.SelectSubset<T, Prisma.AttendeeCreateArgs>
-  ): Promise<Attendee> {
+  ): Promise<PrismaAttendee> {
     return this.prisma.attendee.create<T>(args);
   }
   async updateAttendee<T extends Prisma.AttendeeUpdateArgs>(
     args: Prisma.SelectSubset<T, Prisma.AttendeeUpdateArgs>
-  ): Promise<Attendee> {
+  ): Promise<PrismaAttendee> {
     return this.prisma.attendee.update<T>(args);
   }
   async deleteAttendee<T extends Prisma.AttendeeDeleteArgs>(
     args: Prisma.SelectSubset<T, Prisma.AttendeeDeleteArgs>
-  ): Promise<Attendee> {
+  ): Promise<PrismaAttendee> {
     return this.prisma.attendee.delete(args);
   }
 
   async findAddresses(
     parentId: string,
     args: Prisma.AddressFindManyArgs
-  ): Promise<Address[]> {
+  ): Promise<PrismaAddress[]> {
     return this.prisma.attendee
       .findUniqueOrThrow({
         where: { id: parentId },
@@ -68,7 +66,7 @@ export class AttendeeServiceBase {
   async findBookings(
     parentId: string,
     args: Prisma.BookingFindManyArgs
-  ): Promise<Booking[]> {
+  ): Promise<PrismaBooking[]> {
     return this.prisma.attendee
       .findUniqueOrThrow({
         where: { id: parentId },
@@ -76,7 +74,7 @@ export class AttendeeServiceBase {
       .bookings(args);
   }
 
-  async getCompany(parentId: string): Promise<Company | null> {
+  async getCompany(parentId: string): Promise<PrismaCompany | null> {
     return this.prisma.attendee
       .findUnique({
         where: { id: parentId },
