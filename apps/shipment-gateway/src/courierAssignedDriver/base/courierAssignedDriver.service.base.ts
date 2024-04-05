@@ -13,15 +13,15 @@ import { PrismaService } from "../../prisma/prisma.service";
 
 import {
   Prisma,
-  CourierAssignedDriver, // @ts-ignore
-  Courier,
+  CourierAssignedDriver as PrismaCourierAssignedDriver,
+  Courier as PrismaCourier,
 } from "@prisma/client";
 
 export class CourierAssignedDriverServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
 
-  async count<T extends Prisma.CourierAssignedDriverCountArgs>(
-    args: Prisma.SelectSubset<T, Prisma.CourierAssignedDriverCountArgs>
+  async count(
+    args: Omit<Prisma.CourierAssignedDriverCountArgs, "select">
   ): Promise<number> {
     return this.prisma.courierAssignedDriver.count(args);
   }
@@ -30,39 +30,41 @@ export class CourierAssignedDriverServiceBase {
     T extends Prisma.CourierAssignedDriverFindManyArgs
   >(
     args: Prisma.SelectSubset<T, Prisma.CourierAssignedDriverFindManyArgs>
-  ): Promise<CourierAssignedDriver[]> {
-    return this.prisma.courierAssignedDriver.findMany(args);
+  ): Promise<PrismaCourierAssignedDriver[]> {
+    return this.prisma.courierAssignedDriver.findMany<Prisma.CourierAssignedDriverFindManyArgs>(
+      args
+    );
   }
   async courierAssignedDriver<
     T extends Prisma.CourierAssignedDriverFindUniqueArgs
   >(
     args: Prisma.SelectSubset<T, Prisma.CourierAssignedDriverFindUniqueArgs>
-  ): Promise<CourierAssignedDriver | null> {
+  ): Promise<PrismaCourierAssignedDriver | null> {
     return this.prisma.courierAssignedDriver.findUnique(args);
   }
   async createCourierAssignedDriver<
     T extends Prisma.CourierAssignedDriverCreateArgs
   >(
     args: Prisma.SelectSubset<T, Prisma.CourierAssignedDriverCreateArgs>
-  ): Promise<CourierAssignedDriver> {
+  ): Promise<PrismaCourierAssignedDriver> {
     return this.prisma.courierAssignedDriver.create<T>(args);
   }
   async updateCourierAssignedDriver<
     T extends Prisma.CourierAssignedDriverUpdateArgs
   >(
     args: Prisma.SelectSubset<T, Prisma.CourierAssignedDriverUpdateArgs>
-  ): Promise<CourierAssignedDriver> {
+  ): Promise<PrismaCourierAssignedDriver> {
     return this.prisma.courierAssignedDriver.update<T>(args);
   }
   async deleteCourierAssignedDriver<
     T extends Prisma.CourierAssignedDriverDeleteArgs
   >(
     args: Prisma.SelectSubset<T, Prisma.CourierAssignedDriverDeleteArgs>
-  ): Promise<CourierAssignedDriver> {
+  ): Promise<PrismaCourierAssignedDriver> {
     return this.prisma.courierAssignedDriver.delete(args);
   }
 
-  async getCourier(parentId: string): Promise<Courier | null> {
+  async getCourier(parentId: string): Promise<PrismaCourier | null> {
     return this.prisma.courierAssignedDriver
       .findUnique({
         where: { id: parentId },

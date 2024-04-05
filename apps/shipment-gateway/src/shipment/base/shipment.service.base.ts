@@ -10,49 +10,46 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "../../prisma/prisma.service";
-
 import {
   Prisma,
-  Shipment, // @ts-ignore
-  Courier,
+  Shipment as PrismaShipment,
+  Courier as PrismaCourier,
 } from "@prisma/client";
 
 export class ShipmentServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
 
-  async count<T extends Prisma.ShipmentCountArgs>(
-    args: Prisma.SelectSubset<T, Prisma.ShipmentCountArgs>
-  ): Promise<number> {
+  async count(args: Omit<Prisma.ShipmentCountArgs, "select">): Promise<number> {
     return this.prisma.shipment.count(args);
   }
 
   async shipments<T extends Prisma.ShipmentFindManyArgs>(
     args: Prisma.SelectSubset<T, Prisma.ShipmentFindManyArgs>
-  ): Promise<Shipment[]> {
-    return this.prisma.shipment.findMany(args);
+  ): Promise<PrismaShipment[]> {
+    return this.prisma.shipment.findMany<Prisma.ShipmentFindManyArgs>(args);
   }
   async shipment<T extends Prisma.ShipmentFindUniqueArgs>(
     args: Prisma.SelectSubset<T, Prisma.ShipmentFindUniqueArgs>
-  ): Promise<Shipment | null> {
+  ): Promise<PrismaShipment | null> {
     return this.prisma.shipment.findUnique(args);
   }
   async createShipment<T extends Prisma.ShipmentCreateArgs>(
     args: Prisma.SelectSubset<T, Prisma.ShipmentCreateArgs>
-  ): Promise<Shipment> {
+  ): Promise<PrismaShipment> {
     return this.prisma.shipment.create<T>(args);
   }
   async updateShipment<T extends Prisma.ShipmentUpdateArgs>(
     args: Prisma.SelectSubset<T, Prisma.ShipmentUpdateArgs>
-  ): Promise<Shipment> {
+  ): Promise<PrismaShipment> {
     return this.prisma.shipment.update<T>(args);
   }
   async deleteShipment<T extends Prisma.ShipmentDeleteArgs>(
     args: Prisma.SelectSubset<T, Prisma.ShipmentDeleteArgs>
-  ): Promise<Shipment> {
+  ): Promise<PrismaShipment> {
     return this.prisma.shipment.delete(args);
   }
 
-  async getCourier(parentId: string): Promise<Courier | null> {
+  async getCourier(parentId: string): Promise<PrismaCourier | null> {
     return this.prisma.shipment
       .findUnique({
         where: { id: parentId },
